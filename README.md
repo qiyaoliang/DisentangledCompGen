@@ -1,6 +1,6 @@
 # Compositional Generalization Requires More Than Disentangled Representations
 
-This repository contains the code to reproduce the experiments and results from our paper: "**Compositional Generalization Requires More Than Disentangled Representations**" accepted at ICML 2025. The experiments aim to explore how disentangled or factorized representations in generative models impact compositional generalization and extrapolation to out-of-distribution (OOD) regions. We provide implementations of the main experiments described in the paper and supporting experiments for reproducibility.
+This repository contains the code to reproduce the experiments and results from our paper: "**Compositional Generalization Requires More Than Disentangled Representations**". The experiments aim to explore how disentangled or factorized representations in generative models impact compositional generalization and extrapolation to out-of-distribution (OOD) regions. We provide implementations of the main experiments described in the paper and supporting experiments for reproducibility.
 
 ## Folder Structure
 
