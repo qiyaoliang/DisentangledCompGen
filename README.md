@@ -1,54 +1,54 @@
-# Compositional Generalization Requires More Than Disentangled Representations
+# Compositional Generalization via Forced Rendering of Disentangled Latents
 
-This repository contains the code to reproduce the experiments and results from our paper: "**Compositional Generalization Requires More Than Disentangled Representations**". The experiments aim to explore how disentangled or factorized representations in generative models impact compositional generalization and extrapolation to out-of-distribution (OOD) regions. We provide implementations of the main experiments described in the paper and supporting experiments for reproducibility.
+This repository contains code to reproduce the experiments and results from our ICML 2025 paper: **"Compositional Generalization via Forced Rendering of Disentangled Latents"**. The experiments investigate why disentangled (factorized) latent representations alone are insufficient for compositional generalization and explore methods to achieve robust extrapolation in generative models by forcing these representations into explicit rendering in the output (pixel) space.
 
 ## Folder Structure
 
-The repository contains the following folders, each corresponding to a set of experiments:
+The repository is structured as follows:
 
-- **`gaussian_exps/`**: The main experiments presented in the paper, focusing on 2D Gaussian bump generation tasks using both CNN and MLP architectures. This folder contains the experiments with **bump-based encoding** and **scalar-based encoding** inputs.
-- **`kernel_exps/`**: Supporting experiments involving kernel-based perspectives on factorization and compositional generalization. This folder explores how learned kernels can provide insight into the failure of models to generalize compositional tasks.
-- **`rotation_exps/`**: Supporting experiments where we explore model performance on rotation-based tasks using MNIST digits. This folder investigates the failure of compositional generalization in a simple task of rotating images.
-- **`scaling_exps/`**: Experiments analyzing data scaling and the impact of dataset size on model performance, particularly how smaller datasets can enhance generalization.
-- **`encoder_exps/`**: Supporting experiments on different encoder architectures, comparing how various designs affect the learned representations' ability to generalize.
+- **`gaussian_exps/`**: Main experiments on 2D Gaussian bump generation tasks using CNN and MLP architectures. Explores the impact of different input encodings (**bump-based**, **ramp-based**, **1-hot**) on compositional generalization.
+- **`kernel_exps/`**: Supporting experiments employing a kernel-based perspective, analyzing how learned kernels reflect memorization versus compositional generalization strategies in neural networks.
+- **`rotation_exps/`**: Supporting experiments on rotation-based tasks using MNIST digits. Investigates the network’s generalization failures on simpler compositional tasks, revealing memorization behaviors.
+- **`scaling_exps/`**: Data efficiency and scaling experiments, demonstrating how data augmentation with independent factors ("stripes") significantly improves compositional generalization and data efficiency.
+- **`encoder_exps/`**: Experiments comparing different encoder architectures and their effectiveness in supporting compositional generalization.
 
-## Basic Summary of Experiments
+## Summary of Experiments
 
 ### Main Experiment: Gaussian Bump Generation (`gaussian_exps/`)
-This set of experiments explores the ability of neural networks to learn 2D Gaussian "bump" generation tasks with compositional generalization. The networks are trained on images where a Gaussian bump is located at a 2D coordinate \((x, y)\), with the goal of generating bumps in unseen (OOD) regions. We experiment with two types of network inputs:
-1. **Bump-based encoding**: where the \(x\) and \(y\) coordinates are encoded as Gaussian bumps in the input space.
-2. **Scalar-based encoding**: where the \(x\) and \(y\) coordinates are represented as scalar values.
+The primary experiments evaluate neural network performance on a 2D Gaussian bump image generation task, testing extrapolation to unseen (OOD) coordinate combinations. Networks are provided fully disentangled input representations:
 
-The main findings show that the model's failure to generalize to OOD regions is not solely due to disentangled representations but is significantly impacted by the network's ability to maintain or induce factorization throughout the architecture, especially in the output (pixel) space.
+- **Bump-based encoding**: Input coordinates encoded as Gaussian bumps.
+- **Ramp-based encoding**: Coordinates encoded as continuous ramp signals.
+- **1-hot encoding**: Discrete indicator encoding of coordinates.
 
-The **gaussian_exps** folder includes:
-- Experiments using **CNN** and **MLP** models.
-- Model training with **disentangled** (factorized) input representations.
-- Tests on **compositional generalization** and extrapolation capabilities of models when forced to maintain factorization through architectural regularization.
+**Findings:**
+- Standard networks fail compositional generalization despite explicitly disentangled inputs.
+- Models rely on memorization and superposition of ID examples for OOD generalization.
+- Forced rendering of disentangled latents in the pixel domain (via low-rank architectural constraints or dataset augmentation with independent factors) achieves robust compositional generalization.
 
 ### Supporting Experiment: Kernel-based Analysis (`kernel_exps/`)
-These experiments provide insights into how the learned kernel of a neural network reflects its capacity to generalize. By analyzing the kernel matrix, we investigate the role of memory (i.e., memorization strategies) and factorization in the network's learning process. These experiments also link kernel factorization with the ability to compose novel data combinations.
+- Analyzes learned kernels to reveal memorization-based OOD generalization behaviors.
+- Confirms that neural networks approximate "binary factorized kernels" and rely on superposition of memorized in-distribution data rather than genuine factor composition.
 
 ### Supporting Experiment: Rotation Task (`rotation_exps/`)
-This experiment tests the network's ability to generalize on an image rotation task using the MNIST dataset. Here, models trained with different input encodings are tested on their ability to extrapolate to unseen rotations. Results show that models fail to generalize to OOD rotations due to memorization, and the phenomenon observed in the Gaussian experiments persists in more straightforward tasks.
+- Uses MNIST digit rotation tasks to investigate simpler compositional generalization scenarios.
+- Results confirm the broader phenomenon of memorization and linear superposition of in-distribution samples as a generic neural network generalization strategy.
 
 ### Supporting Experiment: Scaling Analysis (`scaling_exps/`)
-Experiments in this folder analyze how the scaling of data (e.g., increasing image size or dataset size) affects compositional generalization. Results show how certain datasets can enhance model performance and improve extrapolation through specific regularization techniques or by adding independent factors of variation to the training data.
+- Explores data scaling and demonstrates how augmenting datasets with isolated factors (1D stripes) significantly enhances compositional generalization and reduces data requirements from cubic (\(N^3\)) to linear (\(N\)) scaling with respect to image size.
 
 ### Supporting Experiment: Encoder Architectures (`encoder_exps/`)
-In this experiment, we explore different encoder architectures and their impact on the learned representations' factorization and compositional generalization. We compare the performance of different encoding schemes (e.g., bump-based vs. scalar-based encoding) and their effects on generalization.
+- Compares the effectiveness of different encoder architectures and input encoding strategies on compositional generalization performance.
 
 ## Environment Setup
 
-To install the required packages for running the experiments, you can use the provided `environment.yaml` file. This file sets up the necessary environment for running the code in a conda environment. Here’s how you can set it up:
+Install the required packages for running the experiments using the provided `environment.yaml` file.
 
-### Install Conda (if you don't have it)
-If you don’t have conda installed, follow these instructions to install Anaconda or Miniconda:
+### Install Conda (if needed)
 - [Anaconda Installation Guide](https://docs.anaconda.com/anaconda/install/)
 - [Miniconda Installation Guide](https://docs.conda.io/en/latest/miniconda.html)
 
 ### Create the environment
-After installing Conda, create the environment from the `environment.yaml` file:
 
 ```bash
 conda env create -f environment.yaml
@@ -60,3 +60,19 @@ Once the environment is created, activate it using:
 ```bash
 conda activate compositional-gen
 ```
+
+# Citation
+Please cite our paper as follows:
+
+```bibtex
+@inproceedings{Liang2025compositional,
+    title={Compositional Generalization via Forced Rendering of Disentangled Latents},
+    author={Qiyao Liang and Daoyuan Qian and Liu Ziyin and Ila Fiete},
+    booktitle={Proceedings of the 42nd International Conference on Machine Learning (ICML)},
+    year={2025}
+}
+```
+
+# Paper Link and Code
+[Link to paper (arXiv)](https://link_to_your_paper)](https://arxiv.org/abs/2501.18797)
+
