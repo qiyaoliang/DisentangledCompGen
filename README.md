@@ -74,5 +74,5 @@ Please cite our paper as follows:
 ```
 
 # Paper Link and Code
-[[Link to paper (arXiv)](https://link_to_your_paper)](https://arxiv.org/abs/2501.18797)
+[[Link to paper (arXiv)](https://arxiv.org/abs/2501.18797)]
 
